@@ -16,14 +16,21 @@ const recordAudio = () =>
         mediaRecorder.addEventListener("stop", () => {
           const audioBlob = new Blob(audioChunks);
           const audioUrl = URL.createObjectURL(audioBlob);
-          const audio = new Audio(audioUrl);
-          audio.loop = true;
-          const play = () => audio.play();
-          audio.addEventListener("durationchange", () => {
-            if (audio.duration !== Infinity) {
-              resolve({ audioBlob, audioUrl, play, duration: audio.duration });
-            }
-          });
+          // const audio = new Audio(audioUrl);
+          // audio.loop = true;
+          // const play = () => audio.play();
+          // const pause = () => audio.pause();
+          resolve({ audioUrl });
+          // audio.addEventListener("durationchange", () => {
+          //   if (audio.duration !== Infinity) {
+          //     resolve({
+          //       audioBlob,
+          //       audioUrl,
+          //       play,
+          //       pause,
+          //     });
+          //   }
+          // });
         });
 
         mediaRecorder.stop();
@@ -34,6 +41,7 @@ const recordAudio = () =>
 
 export default recordAudio;
 /*
+
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 (async () => {

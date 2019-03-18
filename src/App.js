@@ -1,19 +1,16 @@
-import React, { Component } from "react";
-import Audio from "./components/Audio";
-import "./App.css";
+import React from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Looper from "./components/Looper";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-Root">
-          <div style={{ paddingTop: 20 }}>Loopee</div>
-          <Audio />
-          <div style={{ paddingBottom: 20 }}> Footer </div>
-        </div>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div className="flex flex-col min-h-screen bg-yellow-dark">
+    <Header />
+    <div style={{ minHeight: "80vh" }}>
+      <Looper />
+    </div>
+    <Footer />
+  </div>
+);
 
 export default App;
