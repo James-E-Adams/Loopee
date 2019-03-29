@@ -1,55 +1,75 @@
-import React from "react";
+import React from 'react'
 
-import recordAudio from "../utils/recordAudio";
-import Controls from "./Controls";
-import TrackProgress from "./TrackProgress";
+import Controls from './Controls'
+import recordAudio from '../utils/recordAudio'
+import TrackProgress from './Progress/TrackProgress'
+import RecordingProgress from './Progress/RecordingProgress'
+import withClassName from '../utils/withClassName'
+
+const RECORDING_LENGTH = 3000
+
 class Track extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      recorder: null
-    };
+      audio: null,
+      recorder: null,
+      recording: false,
+      recordingStartTime: null,
+    }
   }
 
   componentDidMount() {
     //Initialise the audio recorder
-    recordAudio().then(recorder =>
+    recordAudio().then((recorder) =>
       this.setState({
-        recorder
+        recorder,
       })
-    );
+    )
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!this.state.audio) return
+    if (!prevProps.isPlaying && this.props.isPlaying) {
+      this.playRecording()
+    } else if (prevProps.isPlaying && !this.props.isPlaying) {
+      this.stopPlayingRecording()
+      this.state.audio.currentTime = 0 //I know, I know
+    }
   }
 
   startRecording() {
-    this.setState({ recording: true });
-    this.state.recorder.start();
+    if (this.props.isPlaying) this.props.setIsPlaying(false)
+    this.props.setIsPlaying(true)
+    this.setState({ recording: true, recordingStartTime: new Date() })
+    this.state.recorder.start()
+    setTimeout(this.stopRecording.bind(this), RECORDING_LENGTH)
   }
 
   stopRecording() {
-    this.setState({ recording: false });
+    this.setState({ recording: false })
     this.state.recorder.stop().then(({ audioUrl }) => {
-      // this.setState({ audio }
-      const audio = new Audio(audioUrl);
-      audio.loop = true;
-      // debugger;
+      const audio = new Audio(audioUrl)
+      audio.loop = true
       this.setState({
-        audio
-      });
-    });
+        audio,
+      })
+      this.playRecording()
+    })
   }
 
   playRecording() {
-    this.setState({ isPlaying: true });
-    this.state.audio.play();
+    this.setState({ isPlaying: true })
+    this.state.audio.play()
   }
   stopPlayingRecording() {
-    this.setState({ isPlaying: false });
-    this.state.audio.pause();
+    this.setState({ isPlaying: false })
+    this.state.audio.pause()
   }
 
   render() {
     return (
-      <div className="border border-black flex">
+      <div className={this.props.className}>
         {this.state.recorder && (
           <Controls
             isPlaying={this.state.isPlaying}
@@ -63,19 +83,23 @@ class Track extends React.Component {
           />
         )}
         <div className="w-4/5">
-          {this.state.audio && (
-            <TrackProgress
-              // audio={{
-              //   currentTime: 5,
-              //   duration: 15
-              // }}
-              audio={this.state.audio}
+          {this.state.audio ? (
+            <TrackProgress audio={this.state.audio} />
+          ) : this.state.recording ? (
+            <RecordingProgress
+              startTime={this.state.recordingStartTime}
+              duration={RECORDING_LENGTH}
             />
-          )}
+          ) : null}
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Track;
+const className = ({ isFirst }) => [
+  isFirst && 'border-t',
+  'border-l border-r border-b border-black flex',
+]
+
+export default withClassName(className)(Track)

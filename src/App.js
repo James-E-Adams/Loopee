@@ -1,16 +1,19 @@
-import React from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Looper from "./components/Looper";
+import React from 'react'
+import withState from 'recompose/withState'
 
-const App = () => (
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Looper from './components/Looper'
+import GlobalControls from './components/GlobalControls'
+const App = ({ isPlaying, setIsPlaying }) => (
   <div className="flex flex-col min-h-screen bg-yellow-dark">
     <Header />
-    <div style={{ minHeight: "80vh" }}>
-      <Looper />
+    <div className="mt-3" style={{ minHeight: '70vh' }}>
+      <Looper isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
     </div>
+    <GlobalControls isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
     <Footer />
   </div>
-);
+)
 
-export default App;
+export default withState('isPlaying', 'setIsPlaying', false)(App)
