@@ -1,26 +1,26 @@
 //https://medium.com/@bryanjenningz/how-to-record-and-play-audio-in-javascript-faa1b2b3e49b
 const recordAudio = () =>
-  new Promise(async resolve => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const mediaRecorder = new MediaRecorder(stream);
-    const audioChunks = [];
+  new Promise(async (resolve) => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    const mediaRecorder = new MediaRecorder(stream)
+    const audioChunks = []
 
-    mediaRecorder.addEventListener("dataavailable", event => {
-      audioChunks.push(event.data);
-    });
+    mediaRecorder.addEventListener('dataavailable', (event) => {
+      audioChunks.push(event.data)
+    })
 
-    const start = () => mediaRecorder.start();
+    const start = () => mediaRecorder.start()
 
     const stop = () =>
-      new Promise(resolve => {
-        mediaRecorder.addEventListener("stop", () => {
-          const audioBlob = new Blob(audioChunks);
-          const audioUrl = URL.createObjectURL(audioBlob);
+      new Promise((resolve) => {
+        mediaRecorder.addEventListener('stop', () => {
+          const audioBlob = new Blob(audioChunks)
+          const audioUrl = URL.createObjectURL(audioBlob)
           // const audio = new Audio(audioUrl);
           // audio.loop = true;
-          // const play = () => audio.play();
+          // const play = () => audi  o.play();
           // const pause = () => audio.pause();
-          resolve({ audioUrl });
+          resolve({ audioUrl })
           // audio.addEventListener("durationchange", () => {
           //   if (audio.duration !== Infinity) {
           //     resolve({
@@ -31,15 +31,15 @@ const recordAudio = () =>
           //     });
           //   }
           // });
-        });
+        })
 
-        mediaRecorder.stop();
-      });
+        mediaRecorder.stop()
+      })
 
-    resolve({ start, stop });
-  });
+    resolve({ start, stop })
+  })
 
-export default recordAudio;
+export default recordAudio
 /*
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
