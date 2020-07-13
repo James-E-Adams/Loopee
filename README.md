@@ -1,3 +1,8 @@
+
+I never finished this, but the idea was multi-track looping in the browser. It's super jank, but I remember it being somewhat novel and functional. Probably fun for like 2 minutes. 
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
